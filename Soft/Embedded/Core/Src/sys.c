@@ -3,7 +3,7 @@
  */
 
 #include "sys.h"
-
+#include "stdint.h"
 /*
  * Event handler queue management.
  * This allows to process interrupt-driven events

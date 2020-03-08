@@ -60,6 +60,10 @@ void HAL_WWDG_MspInit(WWDG_HandleTypeDef* wwdgHandle)
  
 
 /* USER CODE BEGIN 1 */
+void MX_WWDG_Refresh(void)
+{
+	HAL_WWDG_Refresh(&hwwdg);
+}
 
 /* USER CODE END 1 */
 
