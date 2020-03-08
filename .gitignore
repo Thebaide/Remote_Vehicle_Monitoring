@@ -54,3 +54,4 @@ dkms.conf
 *.mk
 *.list
 Soft/Embedded/Debug/makefile
+Soft/CAN_sample_code/
