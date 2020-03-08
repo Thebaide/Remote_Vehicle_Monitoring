@@ -150,11 +150,11 @@ void MX_CAN1_InitBis(void)
 	}
 
 	/*##-4- Configure Transmission process #####################################*/
-	TxHeader.StdId = 0x321;
+	TxHeader.StdId = 0x7DF;
 	TxHeader.ExtId = 0x01;
 	TxHeader.RTR = CAN_RTR_DATA;
 	TxHeader.IDE = CAN_ID_STD;
-	TxHeader.DLC = 2;
+	TxHeader.DLC = 8;
 	TxHeader.TransmitGlobalTime = DISABLE;
 }
 /* USER CODE END 1 */
