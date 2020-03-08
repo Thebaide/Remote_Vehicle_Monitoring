@@ -21,6 +21,50 @@
 #include "can.h"
 
 /* USER CODE BEGIN 0 */
+void MX_CAN1_InitBis(void)
+{
+	CAN_FilterTypeDef  sFilterConfig;
+
+	/*##-1- Configure the CAN Filter ###########################################*/
+	sFilterConfig.FilterBank = 0;
+	sFilterConfig.FilterMode = CAN_FILTERMODE_IDMASK;
+	sFilterConfig.FilterScale = CAN_FILTERSCALE_32BIT;
+	sFilterConfig.FilterIdHigh = 0x0000;
+	sFilterConfig.FilterIdLow = 0x0000;
+	sFilterConfig.FilterMaskIdHigh = 0x0000;
+	sFilterConfig.FilterMaskIdLow = 0x0000;
+	sFilterConfig.FilterFIFOAssignment = CAN_RX_FIFO0;
+	sFilterConfig.FilterActivation = ENABLE;
+	sFilterConfig.SlaveStartFilterBank = 14;
+
+	if (HAL_CAN_ConfigFilter(&CanHandle, &sFilterConfig) != HAL_OK)
+	{
+	/* Filter configuration Error */
+	Error_Handler();
+	}
+
+	/*##-2- Start the CAN peripheral ###########################################*/
+	if (HAL_CAN_Start(&CanHandle) != HAL_OK)
+	{
+		/* Start Error */
+		Error_Handler();
+	}
+
+	/*##-3- Activate CAN RX notification #######################################*/
+	if (HAL_CAN_ActivateNotification(&CanHandle, CAN_IT_RX_FIFO0_MSG_PENDING) != HAL_OK)
+	{
+	/* Notification Error */
+	Error_Handler();
+	}
+
+	/*##-4- Configure Transmission process #####################################*/
+	TxHeader.StdId = 0x321;
+	TxHeader.ExtId = 0x01;
+	TxHeader.RTR = CAN_RTR_DATA;
+	TxHeader.IDE = CAN_ID_STD;
+	TxHeader.DLC = 2;
+	TxHeader.TransmitGlobalTime = DISABLE;
+}
 
 /* USER CODE END 0 */
 

@@ -92,7 +92,7 @@ int main(void)
   MX_CAN1_Init();
   MX_WWDG_Init();
   /* USER CODE BEGIN 2 */
-
+  MX_CAN1_InitBis();
   /* USER CODE END 2 */
  
  
