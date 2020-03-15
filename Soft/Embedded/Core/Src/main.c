@@ -67,6 +67,8 @@ void SystemClock_Config(void);
 int main(void)
 {
 	/* USER CODE BEGIN 1 */
+	uint8_t TxData[8] = {0x02, 0x01, 0x0C, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC}; // get RPM
+	uint32_t TxMailbox;
 
 	/* USER CODE END 1 */
   
@@ -90,19 +92,26 @@ int main(void)
 	/* Initialize all configured peripherals */
 	MX_GPIO_Init();
 	MX_CAN1_Init();
-	MX_WWDG_Init();
+	//MX_WWDG_Init();
 	/* USER CODE BEGIN 2 */
 	MX_CAN1_InitBis();
+
 	/* USER CODE END 2 */
  
 	/* Infinite loop */
 	/* USER CODE BEGIN WHILE */
 	while (1)
 	{
-		MX_WWDG_Refresh();
+		//MX_WWDG_Refresh();
+		/* Start the Transmission process */
+		if (HAL_CAN_AddTxMessage(&hcan1, &TxHeader, TxData, &TxMailbox) != HAL_OK)
+		{
+			/* Transmission request Error */
+			Error_Handler();
+		}
+		HAL_Delay(10);
 		/* USER CODE END WHILE */
-
-	  /* USER CODE BEGIN 3 */
+		/* USER CODE BEGIN 3 */
 	}
 	/* USER CODE END 3 */
 }
@@ -157,14 +166,14 @@ void SystemClock_Config(void)
 
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 {
-  /* Get RX message */
-  if (HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO0, &RxHeader, RxData) != HAL_OK)
-  {
-    /* Reception Error */
-    Error_Handler();
-  }
+	/* Get RX message */
+	if (HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO0, &RxHeader, RxData) != HAL_OK)
+	{
+		/* Reception Error */
+		Error_Handler();
+	}
 
-  /* Display LEDx */
+	/* Display LEDx */
 	if ((RxHeader.StdId == 0x321) && (RxHeader.IDE == CAN_ID_STD) && (RxHeader.DLC == 2))
 	{
 		/* Do something */
